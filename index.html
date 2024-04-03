@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Typing Speed Test</title>
+        <link rel="stylesheet" href="styles.css" />
+    </head>
+    <body>
+        <header>
+            <h1>Typing Speed Test</h1>
+            <div>Time Remaining: <span id="timeLeft">60</span> seconds</div>
+        </header>
+        <div class="container">
+            <div class="buttons">
+                <button id="startBtn">Start Test</button>
+                <button id="retryBtn">Try Again</button>
+            </div>
+            <div id="textDisplay"></div>
+            <div id="highlightedTextDisplay"></div>
+            <div>
+                <input
+                    type="text"
+                    id="user-input"
+                    placeholder="Start typing here..."
+                    disabled
+                />
+            </div>
+            <div id="results">
+                <p>Words per minute: <span id="wpm">0</span></p>
+                <p>Characters per minute: <span id="chpm">0</span></p>
+                <p>Number of mistakes: <span id="mists">0</span></p>
+                <p>Accuracy: <span id="accuracy">0%</span></p>
+            </div>
+        </div>
+        <footer>
+            <p>Instructions</p>
+            <div class="previous-results">
+                <p id="last-result">
+                    Last result: <span id="lastResult"></span>
+                </p>
+                <button id="showResultsBtn">Show 5 previous results</button>
+                <ul id="resultsList"></ul>
+            </div>
+        </footer>
+        <script type="module" src="fetchText.js"></script>
+        <script type="module" src="main.js"></script>
+    </body>
+</html>
