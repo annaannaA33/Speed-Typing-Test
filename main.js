@@ -1,9 +1,9 @@
 import { fetchText } from "./fetchText.js";
 import { saveResults, getAllResults } from "./storage.js";
 
-let startTime,
-    endTime,
-    testDuration = 60; // 60 seconds for the test
+let startTime;
+let endTime;
+const testDuration = 60; // 60 seconds for the test
 let correctCharacters = 0,
     totalCharacters = 0,
     errors = 0;
@@ -11,7 +11,6 @@ let correctWords = 0;
 
 let timerInterval;
 const startBtn = document.getElementById("startBtn");
-//const resetBtn = document.getElementById("resetBtn");
 const textDisplay = document.getElementById("textDisplay");
 const userInput = document.getElementById("user-input");
 const wpmDisplay = document.getElementById("wpm");
@@ -53,13 +52,11 @@ function calculateResults() {
     for (let i = 0; i < userText.length; i++) {
         if (i < originalText.length) {
             totalCharacters++;
-            console.log(`totalCharacters ${totalCharacters}`);
+
             if (userText[i] !== originalText[i]) {
                 errors++;
-                console.log(`errors ${errors}`);
             } else {
                 correctCharacters++;
-                console.log(`correctCharacters ${correctCharacters}`);
             }
         }
     }
@@ -119,12 +116,12 @@ userInput.addEventListener("input", () => {
     for (let i = 0; i < displayText.length; i++) {
         if (i < userText.length && displayText[i] === userText[i]) {
             // Correct character, highlight in green
-            highlightedText += `<span style="text-shadow: 1px 1px 2px rgba(2, 115, 115, 0.8); color: white;">${displayText[i]}</span>`;
+            highlightedText += `<span style="color: green;">${displayText[i]}</span>`;
         } else if (i < userText.length) {
             // Incorrect character, highlight in red
-            highlightedText += `<span style="text-shadow: 1px 1px 2px rgba(115, 51, 0, 0.8); color: white;">${displayText[i]}</span>`;
+            highlightedText += `<span style="color:red;">${displayText[i]}</span>`;
         } else if (i < userText.length + 1) {
-            highlightedText += `<span style="font-weight: bold;">${displayText[i]}</span>`;
+            highlightedText += `<span style="background-color: #ADD8E6;">${displayText[i]}</span>`;
         } else {
             // Unmatched character, display as is
             highlightedText += displayText[i];
@@ -134,45 +131,90 @@ userInput.addEventListener("input", () => {
     document.getElementById("textDisplay").innerHTML = highlightedText;
 });
 
-// Display previous results when page loads
-document.addEventListener("DOMContentLoaded", () => {
-    const lastResult = document.getElementById("lastResult");
-    const resultsList = document.getElementById("resultsList");
-    // get all results from localStorage
+function compareLastTestWithLastResult(getAllResults) {
+    if (!lastResult) return "This is the first test";
+
+    let improvements = 0;
+    let totalMetrics = 4;
+
+    if (lastTest.wpm > lastResult.wpm) improvements++;
+    if (lastTest.chpm > lastResult.chpm) improvements++;
+    if (lastTest.mists < lastResult.mists) improvements++;
+    if (lastTest.accuracy > lastResult.accuracy) improvements++;
+
+    let progress = (improvements / totalMetrics) * 100;
+    return `Progress : ${progress.toFixed(2)}%`;
+}
+
+function displayResultsTable(allResults) {
+    const resultsTable = document.getElementById("resultsTable");
+    resultsTable.innerHTML = ""; // clean to make new
+    //add header
+    const tableHeader = document.createElement("thead");
+    const headerRow = document.createElement("tr");
+
+    const headers = ["Date", "WPM", "CHPM", "Mists", "Accuracy"];
+    headers.forEach((headerText) => {
+        const headerCell = document.createElement("th");
+        headerCell.textContent = headerText;
+        headerRow.appendChild(headerCell);
+    });
+
+    tableHeader.appendChild(headerRow);
+    resultsTable.appendChild(tableHeader);
+
+    const recentResults = allResults.slice(-5);
+
+    recentResults.forEach((result) => {
+        const row = document.createElement("tr");
+
+        const dateCell = document.createElement("td");
+        dateCell.textContent = result.date;
+        row.appendChild(dateCell);
+
+        // WPM
+        const wpmCell = document.createElement("td");
+        wpmCell.textContent = result.wpm;
+        row.appendChild(wpmCell);
+
+        // CHPM
+        const chpmCell = document.createElement("td");
+        chpmCell.textContent = result.chpm;
+        row.appendChild(chpmCell);
+
+        // Mists
+        const mistsCell = document.createElement("td");
+        mistsCell.textContent = result.mists;
+        row.appendChild(mistsCell);
+
+        // Accuracy
+        const accuracyCell = document.createElement("td");
+        accuracyCell.textContent = `${result.accuracy}%`;
+        row.appendChild(accuracyCell);
+
+        resultsTable.appendChild(row);
+    });
+}
+document.getElementById("showResultsBtn").addEventListener("click", () => {
     const allResults = getAllResults();
-    // If there are saved results
+    displayResultsTable(allResults);
+});
 
-    if (allResults.length === 0) {
-        // If there are no results
+let resultsVisible = false; // State variable to track visibility of results
 
-        lastResult.textContent = "No results available.";
-        // Формируем строку с данными последнего результата
-        const lastResultText = `WPM: ${lastResultObj.wpm}, CHPM: ${lastResultObj.chpm}, Mists: ${lastResultObj.mists}, Accuracy: ${lastResultObj.accuracy}%`;
-        lastResult.textContent = lastResultText;
-        return; //Terminate the function so you don't have to continue processing an empty list
+document.getElementById("showResultsBtn").addEventListener("click", () => {
+    const allResults = getAllResults();
+    const resultsTable = document.getElementById("resultsTable");
+    const btn = document.getElementById("showResultsBtn");
+
+    if (!resultsVisible) {
+        displayResultsTable(allResults);
+        btn.textContent = "Hide results";
+        resultsTable.style.display = "table";
+    } else {
+        resultsTable.style.display = "none";
+        btn.textContent = "Show 5 previous results";
     }
 
-    const showResultsBtn = document.getElementById("showResultsBtn");
-    // Add a button click event listener
-
-    showResultsBtn.addEventListener("click", () => {
-        // Clear the previous list of results, if any
-
-        resultsList.innerHTML = "";
-        // Getting the last 5 results
-
-        const allResults = getAllResults();
-        if (Array.isArray(allResults)) {
-            const recentResults = allResults.slice(-5);
-            // For each result, create a list element and add it to the list
-
-            recentResults.forEach((result) => {
-                const listItem = document.createElement("li");
-                listItem.textContent = `WPM: ${result.wpm}, CHPM: ${result.chpm}, Mists: ${result.mists}, Accuracy: ${result.accuracy}% date: ${result.date}`;
-                resultsList.appendChild(listItem);
-            });
-        } else {
-            console.error("Error: allResults is not an array");
-        }
-    });
+    resultsVisible = !resultsVisible;
 });
