@@ -27,7 +27,11 @@ startBtn.addEventListener("click", async () => {
     userInput.disabled = false;
     userInput.focus();
 });
-
+document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+        startBtn.click();
+    }
+});
 function startTimer(time) {
     let timeLeft = time;
     let intervalId = setInterval(() => {
