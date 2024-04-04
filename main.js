@@ -10,7 +10,7 @@ let correctCharacters = 0,
 let correctWords = 0;
 
 let timerInterval;
-const startBtn = document.getElementById("startBtn");
+const resetBtn = document.getElementById("resetBtn");
 const textDisplay = document.getElementById("textDisplay");
 const userInput = document.getElementById("user-input");
 const wpmDisplay = document.getElementById("wpm");
@@ -26,17 +26,44 @@ document.addEventListener("DOMContentLoaded", async () => {
     userInput.focus();
 });
 
-startBtn.addEventListener("click", async () => {
+async function startTest() {
+    resetTest(); // Reset previous results
     const text = await fetchText();
     textDisplay.textContent = text;
-    startTime = new Date();
-    timerInterval = startTimer(testDuration);
+
     userInput.disabled = false;
     userInput.focus();
+}
+
+function resetTest() {
+    clearInterval(timerInterval);
+    startTime = null;
+    endTime = null;
+    correctCharacters = 0;
+    totalCharacters = 0;
+    errors = 0;
+    correctWords = 0;
+    wpmDisplay.textContent = "0";
+    chpmDisplay.textContent = "0";
+    mistsDisplay.textContent = "0";
+    accuracyDisplay.textContent = "0%";
+    timeLeftDisplay.textContent = testDuration;
+    userInput.value = "";
+}
+
+retryBtn.addEventListener("click", resetTest);
+
+document.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+        retryBtn.click();
+    }
 });
+
+resetBtn.addEventListener("click", startTest);
+
 document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") {
-        startBtn.click();
+        resetBtn.click();
     }
 });
 
@@ -100,30 +127,12 @@ function calculateResults() {
     });
 }
 
-function resetTest() {
-    clearInterval(timerInterval);
-    startTime = null;
-    endTime = null;
-    correctCharacters = 0;
-    totalCharacters = 0;
-    errors = 0;
-    textDisplay.textContent = "";
-    userInput.value = "";
-    wpmDisplay.textContent = "0";
-    chpmDisplay.textContent = "0";
-    mistsDisplay.textContent = "0";
-    accuracyDisplay.textContent = "0%";
-    timeLeftDisplay.textContent = "60";
-    startTest();
-}
-
-const retryBtn = document.getElementById("retryBtn");
-retryBtn.addEventListener("click", resetTest);
-
 userInput.addEventListener("input", () => {
     if (!startTime) {
         startTime = new Date();
         timerInterval = startTimer(testDuration);
+        //clearInterval(timerInterval);
+        //timerInterval = startTimer(testDuration);
     }
 
     let userText = userInput.value;
@@ -147,21 +156,6 @@ userInput.addEventListener("input", () => {
 
     document.getElementById("textDisplay").innerHTML = highlightedText;
 });
-
-function compareLastTestWithLastResult(getAllResults) {
-    if (!lastResult) return "This is the first test";
-
-    let improvements = 0;
-    let totalMetrics = 4;
-
-    if (lastTest.wpm > lastResult.wpm) improvements++;
-    if (lastTest.chpm > lastResult.chpm) improvements++;
-    if (lastTest.mists < lastResult.mists) improvements++;
-    if (lastTest.accuracy > lastResult.accuracy) improvements++;
-
-    let progress = (improvements / totalMetrics) * 100;
-    return `Progress : ${progress.toFixed(2)}%`;
-}
 
 function displayResultsTable(allResults) {
     const resultsTable = document.getElementById("resultsTable");
