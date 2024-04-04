@@ -46,6 +46,7 @@ function resetTest() {
     accuracyDisplay.textContent = "0%";
     timeLeftDisplay.textContent = testDuration;
     userInput.value = "";
+    userInput.focus();
 }
 
 retryBtn.addEventListener("click", resetTest);
