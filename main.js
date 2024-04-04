@@ -19,6 +19,13 @@ const mistsDisplay = document.getElementById("mists");
 const accuracyDisplay = document.getElementById("accuracy");
 const timeLeftDisplay = document.getElementById("timeLeft");
 
+document.addEventListener("DOMContentLoaded", async () => {
+    const text = await fetchText();
+    textDisplay.textContent = text;
+    userInput.disabled = false;
+    userInput.focus();
+});
+
 startBtn.addEventListener("click", async () => {
     const text = await fetchText();
     textDisplay.textContent = text;
