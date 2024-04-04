@@ -20,10 +20,7 @@ const accuracyDisplay = document.getElementById("accuracy");
 const timeLeftDisplay = document.getElementById("timeLeft");
 
 document.addEventListener("DOMContentLoaded", async () => {
-    const text = await fetchText();
-    textDisplay.textContent = text;
-    userInput.disabled = false;
-    userInput.focus();
+    await startTest();
 });
 
 async function startTest() {
