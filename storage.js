@@ -1,12 +1,8 @@
 export function saveResults(results) {
     const resultsKey = "typingTestResults";
     const storedResults = localStorage.getItem(resultsKey);
-    //console.log(storedResults);
     let allResults = storedResults ? JSON.parse(storedResults) : [];
-    //console.log(allResults);
-
     if (Array.isArray(allResults)) {
-        // check if allResults is an array
         allResults.push(results);
         localStorage.setItem(resultsKey, JSON.stringify(allResults));
     } else {
