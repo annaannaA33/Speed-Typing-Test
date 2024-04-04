@@ -39,6 +39,7 @@ document.addEventListener("keydown", (event) => {
         startBtn.click();
     }
 });
+
 function startTimer(time) {
     let timeLeft = time;
     let intervalId = setInterval(() => {
@@ -91,10 +92,10 @@ function calculateResults() {
     userInput.disabled = true;
 
     saveResults({
-        wpm: wpm,
+        wpm,
         chpm: cpm,
         mists: errors,
-        accuracy: accuracy,
+        accuracy,
         date: new Date().toLocaleString(),
     });
 }
@@ -120,6 +121,11 @@ const retryBtn = document.getElementById("retryBtn");
 retryBtn.addEventListener("click", resetTest);
 
 userInput.addEventListener("input", () => {
+    if (!startTime) {
+        startTime = new Date();
+        timerInterval = startTimer(testDuration);
+    }
+
     let userText = userInput.value;
     let displayText = textDisplay.textContent;
     let highlightedText = "";
