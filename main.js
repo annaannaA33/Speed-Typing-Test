@@ -27,7 +27,6 @@ async function startTest() {
     resetTest(); // Reset previous results
     const text = await fetchText();
     textDisplay.textContent = text;
-
     userInput.disabled = false;
     userInput.focus();
 }
