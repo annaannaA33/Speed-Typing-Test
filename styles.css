@@ -9,21 +9,27 @@ header {
     color: #ffffff;
 
     margin: 0;
-    padding: 40px;
+    padding-left: 40px;
+    padding-right: 40px;
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
 .container {
     max-width: 800px;
-    margin: 50px auto;
-    padding: 20px;
+    margin: 10px auto;
+    padding: 5px 50px;
     border: 1px solid #ccc;
-    border-radius: 5px;
+    border-radius: 15px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 h1 {
     text-align: center;
     margin-top: 0px;
-    padding: 20px;
+    padding-left: 40px;
+    padding-right: 40px;
+    padding-top: 10px;
+    padding-bottom: 0px;
 }
 
 #text-display {
@@ -32,6 +38,7 @@ h1 {
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     padding: 20px;
+    font-size: 20px;
 }
 
 #results {
@@ -42,14 +49,16 @@ h1 {
     border-radius: 5px;
 }
 #user-input {
-    margin: 20px;
-    padding: 20px;
+    margin: 10px 20px;
+    padding: 10px 20px;
     border: 1px solid #ccc;
     border-radius: 5px;
+    font-size: 16px;
 }
 
 /*correct unswer color #A9D9D0, incorrect color #D96941 */
-button {
+button,
+.buttons div {
     background-color: #038c7f;
     color: #ffffff;
     border: 1px solid #ccc;
@@ -72,9 +81,9 @@ button:hover {
     flex-direction: column;
     align-items: start;
     background-color: #038c7f;
-    padding: 20px;
+    padding: 10px 20px;
     border: 1px solid #ccc;
-    border-radius: 5px;
+    border-radius: 15px;
     margin: 20px;
 }
 #resultsTable {
