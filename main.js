@@ -3,12 +3,11 @@ import { saveResults, getAllResults } from "./storage.js";
 
 let startTime;
 let endTime;
-const testDuration = 60; // 60 seconds for the test
-let correctCharacters = 0,
-    totalCharacters = 0,
-    errors = 0;
+const testDuration = 10; // 60 seconds for the test
+let correctCharacters = 0;
+let totalCharacters = 0;
+let errors = 0;
 let correctWords = 0;
-
 let timerInterval;
 const resetBtn = document.getElementById("resetBtn");
 const textDisplay = document.getElementById("textDisplay");
@@ -29,6 +28,8 @@ async function startTest() {
     textDisplay.textContent = text;
     userInput.disabled = false;
     userInput.focus();
+    document.getElementById("result-previous").style.display = "block";
+    document.getElementById("comparison").style.display = "block";
 }
 
 function resetTest() {
@@ -73,6 +74,7 @@ function startTimer(time) {
             clearInterval(intervalId);
             timeLeft = 0;
             timeLeftDisplay.textContent = "0";
+
             calculateResults();
         }
     }, 1000);
@@ -95,6 +97,8 @@ function calculateResults() {
                 correctCharacters++;
             }
         }
+        document.getElementById("result-previous").style.opacity = 1;
+        document.getElementById("comparison").style.opacity = 1;
     }
 
     let originalWords = originalText.split(/\s+/);
@@ -128,13 +132,13 @@ userInput.addEventListener("input", () => {
     if (!startTime) {
         startTime = new Date();
         timerInterval = startTimer(testDuration);
-        //clearInterval(timerInterval);
-        //timerInterval = startTimer(testDuration);
     }
 
     let userText = userInput.value;
     let displayText = textDisplay.textContent;
     let highlightedText = "";
+    document.getElementById("result-previous").style.opacity = 0;
+    document.getElementById("comparison").style.opacity = 0;
 
     for (let i = 0; i < displayText.length; i++) {
         if (i < userText.length && displayText[i] === userText[i]) {
@@ -225,4 +229,141 @@ document.getElementById("showResultsBtn").addEventListener("click", () => {
     }
 
     resultsVisible = !resultsVisible;
+});
+
+document.addEventListener("DOMContentLoaded", async () => {
+    await displayPreviousResults();
+});
+
+async function displayPreviousResults() {
+    const previousResults = getPreviousResults();
+    const resultPreviousDiv = document.getElementById("result-previous");
+
+    // Update div with previous results
+    resultPreviousDiv.querySelector("#wpm").textContent = previousResults.wpm;
+    resultPreviousDiv.querySelector("#chpm").textContent = previousResults.chpm;
+    resultPreviousDiv.querySelector("#mists").textContent =
+        previousResults.mists;
+    resultPreviousDiv.querySelector(
+        "#accuracy"
+    ).textContent = `${previousResults.accuracy}%`;
+}
+
+function getPreviousResults() {
+    // get data from getAllResults()
+    const allResults = getAllResults();
+
+    // previous result is before the current one
+    const previousResultIndex = allResults.length - 1;
+
+    if (previousResultIndex >= 0) {
+        return allResults[previousResultIndex];
+    } else {
+        // If there are no previous results, return empty
+        return {
+            wpm: 0,
+            chpm: 0,
+            mists: 0,
+            accuracy: 0,
+        };
+    }
+}
+
+function compareResults() {
+    const currentResults = {
+        wpm: parseInt(
+            document.getElementById("results").querySelector("#wpm").textContent
+        ),
+        chpm: parseInt(
+            document.getElementById("results").querySelector("#chpm")
+                .textContent
+        ),
+        mists: parseInt(
+            document.getElementById("results").querySelector("#mists")
+                .textContent
+        ),
+        accuracy: parseInt(
+            document
+                .getElementById("results")
+                .querySelector("#accuracy")
+                .textContent.replace("%", "")
+        ),
+    };
+
+    const previousResults = {
+        wpm: parseInt(
+            document.getElementById("result-previous").querySelector("#wpm")
+                .textContent
+        ),
+        chpm: parseInt(
+            document.getElementById("result-previous").querySelector("#chpm")
+                .textContent
+        ),
+        mists: parseInt(
+            document.getElementById("result-previous").querySelector("#mists")
+                .textContent
+        ),
+        accuracy: parseInt(
+            document
+                .getElementById("result-previous")
+                .querySelector("#accuracy")
+                .textContent.replace("%", "")
+        ),
+    };
+
+    // Calculate change for each metric
+    const wpmChange = currentResults.wpm - previousResults.wpm;
+    const chpmChange = currentResults.chpm - previousResults.chpm;
+    const mistsChange = currentResults.mists - previousResults.mists;
+    const accuracyChange = currentResults.accuracy - previousResults.accuracy;
+
+    // Show change in div with id "comparison"
+    const comparisonDiv = document.getElementById("comparison");
+
+    let wpmChangeText, chpmChangeText, mistsChangeText, accuracyChangeText;
+
+    if (wpmChange === 0) {
+        wpmChangeText = "No change";
+    } else if (currentResults.wpm > previousResults.wpm) {
+        wpmChangeText = "Improved by " + wpmChange + " words per minute";
+    } else {
+        wpmChangeText =
+            "Worsened by " + Math.abs(wpmChange) + " words per minute";
+    }
+
+    if (chpmChange === 0) {
+        chpmChangeText = "No change";
+    } else if (currentResults.chpm > previousResults.chpm) {
+        chpmChangeText = "Improved by " + chpmChange + " characters per minute";
+    } else {
+        chpmChangeText =
+            "Worsened by " + Math.abs(chpmChange) + " characters per minute";
+    }
+
+    if (mistsChange === 0) {
+        mistsChangeText = "No change";
+    } else if (currentResults.mists > previousResults.mists) {
+        mistsChangeText = "Decreased by " + mistsChange + " mistakes";
+    } else {
+        mistsChangeText = "Increased by " + Math.abs(mistsChange) + " mistakes";
+    }
+
+    if (accuracyChange === 0) {
+        accuracyChangeText = "No change";
+    } else if (currentResults.accuracy > previousResults.accuracy) {
+        accuracyChangeText = "Improved by " + accuracyChange + "%";
+    } else {
+        accuracyChangeText = "Worsened by " + Math.abs(accuracyChange) + "%";
+    }
+
+    comparisonDiv.innerHTML = `
+    <p>WPM: ${wpmChangeText}</p>
+    <p>CPM: ${chpmChangeText}</p>
+    <p>MIST: ${mistsChangeText}</p>
+    <p>ACCURACY: ${accuracyChangeText}</p>
+`;
+}
+
+document.addEventListener("DOMContentLoaded", async () => {
+    compareResults();
 });
