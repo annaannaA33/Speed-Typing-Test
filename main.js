@@ -325,35 +325,35 @@ function compareResults() {
     if (wpmChange === 0) {
         wpmChangeText = "No change";
     } else if (currentResults.wpm > previousResults.wpm) {
-        wpmChangeText = "Improved by " + wpmChange + " words per minute";
+        wpmChangeText = "Improved";
     } else {
         wpmChangeText =
-            "Worsened by " + Math.abs(wpmChange) + " words per minute";
+            "Worsened";
     }
 
     if (chpmChange === 0) {
         chpmChangeText = "No change";
     } else if (currentResults.chpm > previousResults.chpm) {
-        chpmChangeText = "Improved by " + chpmChange + " characters per minute";
+        chpmChangeText = "Improved";
     } else {
         chpmChangeText =
-            "Worsened by " + Math.abs(chpmChange) + " characters per minute";
+            "Worsened";
     }
 
     if (mistsChange === 0) {
         mistsChangeText = "No change";
     } else if (currentResults.mists > previousResults.mists) {
-        mistsChangeText = "Decreased by " + mistsChange + " mistakes";
+        mistsChangeText = "Worsened";
     } else {
-        mistsChangeText = "Increased by " + Math.abs(mistsChange) + " mistakes";
+        mistsChangeText = "Improved";
     }
 
     if (accuracyChange === 0) {
         accuracyChangeText = "No change";
     } else if (currentResults.accuracy > previousResults.accuracy) {
-        accuracyChangeText = "Improved by " + accuracyChange + "%";
+        accuracyChangeText = "Improved";
     } else {
-        accuracyChangeText = "Worsened by " + Math.abs(accuracyChange) + "%";
+        accuracyChangeText = "Worsened";
     }
 
     comparisonDiv.innerHTML = `
