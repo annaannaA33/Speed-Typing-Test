@@ -79,6 +79,7 @@ function startTimer(time) {
             calculateResults();
         }
     }, 1000);
+
     return intervalId;
 }
 
@@ -98,6 +99,7 @@ function calculateResults() {
                 correctCharacters++;
             }
         }
+
         document.getElementById("result-previous").style.opacity = 1;
         document.getElementById("comparison").style.opacity = 1;
     }
@@ -120,6 +122,7 @@ function calculateResults() {
     accuracyDisplay.textContent = `${accuracy}%`;
     userInput.disabled = true;
 
+    compareResults();
     saveResults({
         wpm,
         chpm: cpm,
@@ -314,9 +317,21 @@ function compareResults() {
 
     // Calculate change for each metric
     const wpmChange = currentResults.wpm - previousResults.wpm;
+    console.log(wpmChange);
+    console.log(`currentResults.wpm ${currentResults.wpm}`);
+    console.log(`previousResults.wpm ${previousResults.wpm}`);
     const chpmChange = currentResults.chpm - previousResults.chpm;
+    console.log(chpmChange);
+    console.log(`currentResults.chpm ${currentResults.chpm}`);
+    console.log(`previousResults.chpm ${previousResults.chpm}`);
     const mistsChange = currentResults.mists - previousResults.mists;
+    console.log(mistsChange);
+    console.log(`currentResults.mists ${currentResults.mists}`);
+    console.log(`previousResults.mists ${previousResults.mists}`);
     const accuracyChange = currentResults.accuracy - previousResults.accuracy;
+    console.log(accuracyChange);
+    console.log(`currentResults.accuracy ${currentResults.accuracy}`);
+    console.log(`previousResults.accuracy ${previousResults.accuracy}`);
 
     // Show change in div with id "comparison"
     const comparisonDiv = document.getElementById("comparison");
@@ -326,35 +341,33 @@ function compareResults() {
     if (wpmChange === 0) {
         wpmChangeText = "No change";
     } else if (currentResults.wpm > previousResults.wpm) {
-        wpmChangeText = "Improved";
+        wpmChangeText = `Improved for ${Math.abs(wpmChange)} words`;
     } else {
-        wpmChangeText =
-            "Worsened";
+        wpmChangeText = `Worsened for ${Math.abs(wpmChange)} words`;
     }
 
     if (chpmChange === 0) {
         chpmChangeText = "No change";
     } else if (currentResults.chpm > previousResults.chpm) {
-        chpmChangeText = "Improved";
+        chpmChangeText = `${Math.abs(chpmChange)} more characters`;
     } else {
-        chpmChangeText =
-            "Worsened";
+        chpmChangeText = `${Math.abs(chpmChange)} fewer characters`;
     }
 
     if (mistsChange === 0) {
         mistsChangeText = "No change";
     } else if (currentResults.mists > previousResults.mists) {
-        mistsChangeText = "Worsened";
+        mistsChangeText = `${Math.abs(mistsChange)} more errors`;
     } else {
-        mistsChangeText = "Improved";
+        mistsChangeText = `${Math.abs(mistsChange)} fewer errors`;
     }
 
     if (accuracyChange === 0) {
         accuracyChangeText = "No change";
     } else if (currentResults.accuracy > previousResults.accuracy) {
-        accuracyChangeText = "Improved";
+        accuracyChangeText = `Improved for ${Math.abs(accuracyChange)}`;
     } else {
-        accuracyChangeText = "Worsened";
+        accuracyChangeText = `Reduced for ${Math.abs(accuracyChange)}`;
     }
 
     comparisonDiv.innerHTML = `
@@ -364,7 +377,3 @@ function compareResults() {
     <p>ACCURACY: ${accuracyChangeText}</p>
 `;
 }
-
-document.addEventListener("DOMContentLoaded", async () => {
-    compareResults();
-});
