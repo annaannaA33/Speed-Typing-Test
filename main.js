@@ -3,7 +3,7 @@ import { saveResults, getAllResults } from "./storage.js";
 
 let startTime;
 let endTime;
-const testDuration = 10; // 60 seconds for the test
+const testDuration = 60; // 60 seconds for the test
 let correctCharacters = 0;
 let totalCharacters = 0;
 let errors = 0;
