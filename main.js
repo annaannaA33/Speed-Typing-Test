@@ -47,6 +47,7 @@ function resetTest() {
     timeLeftDisplay.textContent = testDuration;
     userInput.value = "";
     userInput.focus();
+    userInput.disabled = false;
 }
 
 retryBtn.addEventListener("click", resetTest);
