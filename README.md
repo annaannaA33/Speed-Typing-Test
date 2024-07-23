@@ -15,16 +15,16 @@ Local Storage: Used for storing test results and other necessary data.
 Installation
 To install and run the application locally, follow these steps:
 
-Clone the Repository:
-
+1. Clone the Repository:
 git clone https://github.com/annaannaA33/Speed-Typing-Test.git
-Navigate to the Project Directory:
 
+2. Navigate to the Project Directory:
 cd speed-typing-test
-Open the index.html File:
+
+3. Open the index.html File:
 Simply open the index.html file in your preferred web browser.
 
-That's it! The application should now be up and running.
+
 
 Usage
 Start Typing: Begin typing the displayed text to start the timer and track your progress.
