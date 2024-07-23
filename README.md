@@ -1,4 +1,5 @@
 Speed Typing Test
+
 This is a small application designed to measure typing speed. While the design is simple, the focus is on the logic and functionality of the application. This is my first JavaScript application that works.
 
 Features
