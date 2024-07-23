@@ -12,8 +12,13 @@ Retry Functionality: Press the Enter key or click the 'Try Again' button to rest
 Reset Functionality: Press the ESC key to reset the test with new text.
 Technologies Used
 Local Storage: Used for storing test results and other necessary data.
+
+
 Installation
-To install and run the application locally, follow these steps:
+To run the application, simply visit the following link:
+https://annaannaa33.github.io/Speed-Typing-Test/
+
+If you prefer to run it locally, follow these steps:
 
 1. Clone the Repository:
 git clone https://github.com/annaannaA33/Speed-Typing-Test.git
