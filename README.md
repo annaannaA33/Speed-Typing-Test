@@ -17,7 +17,7 @@ To install and run the application locally, follow these steps:
 
 Clone the Repository:
 
-git clone + link
+git clone https://github.com/annaannaA33/Speed-Typing-Test.git
 Navigate to the Project Directory:
 
 cd speed-typing-test
